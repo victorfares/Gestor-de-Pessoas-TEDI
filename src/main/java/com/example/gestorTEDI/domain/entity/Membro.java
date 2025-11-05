@@ -3,16 +3,18 @@ package com.example.gestorTEDI.domain.entity;
 import com.example.gestorTEDI.domain.model.Pessoa;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @AttributeOverrides({
         @AttributeOverride(name = "nome", column = @Column(name = "membro_nome", nullable = false)),
-        @AttributeOverride(name = "email", column = @Column(name = "membro_email", unique = true))
+        @AttributeOverride(name = "email", column = @Column(name = "membro_email", unique = true)),
+        @AttributeOverride(name = "telefone", column = @Column(name = "membro_telefone", unique = true))
 })
 
 public class Membro extends Pessoa {
