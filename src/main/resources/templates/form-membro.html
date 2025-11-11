@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Membro</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        form { background-color: #f9f9f9; border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
+        div { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="email"] {
+            width: 300px; padding: 10px; border-radius: 5px; border: 1px solid #ccc;
+        }
+        .btn { padding: 10px 15px; text-decoration: none; color: white; border-radius: 5px; cursor: pointer; border: none; }
+        .btn-primary { background-color: #007bff; }
+        .btn-secondary { background-color: #6c757d; }
+    </style>
+</head>
+<body>
+
+<h1>Adicionar Novo Membro</h1>
+
+<form th:action="@{/web/membros/salvar}" th:object="${novoMembro}" method="post">
+
+    <div>
+        <label for="nomeMembro">Nome:</label>
+        <input type="text" id="nomeMembro" th:field="*{nomeMembro}" required />
+    </div>
+    <div>
+        <label for="raMembro">RA:</label>
+        <input type="text" id="raMembro" th:field="*{raMembro}" required />
+    </div>
+    <div>
+        <label for="emailMembro">Email:</label>
+        <input type="email" id="emailMembro" th:field="*{emailMembro}" required />
+    </div>
+    <div>
+        <label for="departamentoMembro">Departamento:</label>
+        <input type="text" id="departamentoMembro" th:field="*{departamentoMembro}" required />
+    </div>
+    <div>
+        <label for="funcaoMembro">Função:</label>
+        <input type="text" id="funcaoMembro" th:field="*{funcaoMembro}" />
+    </div>
+    <div>
+        <label for="telefoneMembro">Telefone:</label>
+        <input type="text" id="telefoneMembro" th:field="*{telefoneMembro}" />
+    </div>
+
+    <br/>
+
+    <div>
+        <button type="submit" class="btn btn-primary">Salvar Membro</button>
+
+        <a th:href="@{/web/membros}" class="btn btn-secondary">Voltar para Lista</a>
+    </div>
+
+</form>
+
+</body>
+</html>

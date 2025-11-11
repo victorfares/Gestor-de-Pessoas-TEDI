@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestor TEDI</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .actions, .search-form { margin: 20px 0; display: flex; gap: 10px; align-items: center; }
+        .btn { padding: 10px 15px; text-decoration: none; color: white; border-radius: 5px; cursor: pointer; border: none; }
+        .btn-primary { background-color: #007bff; }
+        .btn-secondary { background-color: #6c757d; }
+        .btn-success { background-color: #28a745; }
+        input[type="text"] { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+
+<h1>Gestor de Membros TEDI</h1>
+
+<div class="actions">
+    <a th:href="@{/web/membros/novo}" class="btn btn-primary">
+        + Adicionar Novo Membro
+    </a>
+</div>
+
+<div class="search-form">
+    <form th:action="@{/web/membros}" method="get">
+        <input type="text" name="query" placeholder="Buscar por nome ou RA..." th:value="${param.query}" />
+        <button type="submit" class="btn btn-success">Buscar</button>
+
+        <a th:href="@{/web/membros}" class="btn btn-secondary">Limpar Busca</a>
+    </form>
+</div>
+
+<h2>Membros Cadastrados</h2>
+
+<div th:if="${listaDeMembros.isEmpty()}">
+    <p>Nenhum membro encontrado.</p>
+</div>
+
+<table th:unless="${listaDeMembros.isEmpty()}">
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>RA</th>
+        <th>Departamento</th>
+        <th>Função</th>
+        <th>Email</th>
+        <th>Telefone</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="membro : ${listaDeMembros}">
+        <td th:text="${membro.nome}">Victor Hugo</td>
+        <td th:text="${membro.ra}">123456</td>
+        <td th:text="${membro.departamento}">Desenvolvimento</td>
+        <td th:text="${membro.funcao}">Dev Backend</td>
+        <td th:text="${membro.email}">victor@email.com</td>
+        <td th:text="${membro.telefone}">+554399999</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
