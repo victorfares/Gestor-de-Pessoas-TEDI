@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,5 +37,15 @@ public class AlunoService {
     public Aluno findByRg(String rg) {
         return alunoRepository.findByRg(rg)
                 .orElseThrow(() -> new RuntimeException("Aluno não encontrado com RG: " + rg));
+    }
+
+    public List<Aluno> findAlunos(String rg) { // <-- MUDANÇA AQUI
+        if (rg != null && !rg.isBlank()) {
+            // Se o RG foi passado, busca por ele
+            return alunoRepository.findByRgContainingIgnoreCase(rg); // <-- MUDANÇA AQUI
+        } else {
+            // Se o RG está nulo ou vazio, retorna todos
+            return alunoRepository.findAll();
+        }
     }
 }

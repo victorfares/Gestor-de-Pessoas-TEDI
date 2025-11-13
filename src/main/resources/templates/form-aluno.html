@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Aluno</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        form { background-color: #f9f9f9; border: 1px solid #ddd; padding: 20px; border-radius: 8px; max-width: 500px; }
+        div { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="email"], select {
+            width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box;
+        }
+        .btn { padding: 10px 15px; text-decoration: none; color: white; border-radius: 5px; cursor: pointer; border: none; }
+        .btn-primary { background-color: #007bff; }
+        .btn-secondary { background-color: #6c757d; }
+    </style>
+</head>
+<body>
+
+<h1>Formulário de Aluno</h1>
+
+<form th:action="@{/web/alunos/salvar}" th:object="${novoAluno}" method="post">
+
+    <div>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" th:field="*{nome}" required />
+    </div>
+    <div>
+        <label for="rg">RG:</label>
+        <input type="text" id="rg" th:field="*{rg}" required />
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" th:field="*{email}" required />
+    </div>
+    <div>
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" th:field="*{telefone}" />
+    </div>
+
+    <div>
+        <label for="nivelDigital">Nível Digital:</label>
+        <select id="nivelDigital" th:field="*{nivelDigital}" required>
+            <option value="">Selecione um nível</option>
+            <option th:each="nivel : ${niveisDigitais}"
+                    th:value="${nivel}"
+                    th:text="${nivel}">INICIANTE</option>
+        </select>
+    </div>
+
+    <br/>
+
+    <div>
+        <button type="submit" class="btn btn-primary">Salvar Aluno</button>
+        <a th:href="@{/web/alunos}" class="btn btn-secondary">Voltar para Lista</a>
+    </div>
+
+</form>
+
+</body>
+</html>

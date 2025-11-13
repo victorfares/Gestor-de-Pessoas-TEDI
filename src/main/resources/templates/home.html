@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Gestor TEDI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        .nav-card {
+            width: 300px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            transition: all 0.3s ease;
+        }
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        .nav-card h2 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .nav-card p {
+            font-size: 16px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Bem-vindo ao Gestor de Pessoas TEDI</h1>
+
+<div class="nav-container">
+
+    <a th:href="@{/web/membros}" class="nav-card">
+        <h2>Gerenciar Membros</h2>
+        <p>Visualizar, adicionar e buscar membros da equipe.</p>
+    </a>
+
+    <a th:href="@{/web/alunos}" class="nav-card">
+        <h2>Gerenciar Alunos</h2>
+        <p>Visualizar, adicionar e buscar alunos.</p>
+    </a>
+
+</div>
+
+</body>
+</html>

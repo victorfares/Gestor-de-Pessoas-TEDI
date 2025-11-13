@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
@@ -22,15 +23,28 @@ public class AlunoRestResource {
     private final AlunoRepository alunoRepository;
 
     @PostMapping
-    public ResponseEntity<AlunoDTO> saveAluno(@RequestBody SaveAlunoDataDTO saveAlunoDataDTO){
+    public ResponseEntity<AlunoDTO> saveAluno(@RequestBody SaveAlunoDataDTO saveAlunoDataDTO) {
         Aluno aluno = alunoService.createAluno(saveAlunoDataDTO);
         return ResponseEntity.created(URI.create("/alunos/" + aluno.getRg()))
                 .body(AlunoDTO.createAlunoDTO(aluno));
     }
 
     @GetMapping("/{rg}")
-    public ResponseEntity<AlunoDTO> loadAlunoByRg(@PathVariable("rg") String memberId){
+    public ResponseEntity<AlunoDTO> loadAlunoByRg(@PathVariable("rg") String memberId) {
         Aluno aluno = alunoService.findByRg(memberId);
         return ResponseEntity.ok(AlunoDTO.createAlunoDTO(aluno));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AlunoDTO>> findAlunos(
+            @RequestParam(value = "rg", required = false) String rg // <-- MUDANÇA AQUI
+    ) {
+        // 2. Chama o método do serviço (agora passando rg)
+        List<Aluno> alunos = alunoService.findAlunos(rg); // <-- MUDANÇA AQUI
+
+        // 3. Converte a lista para DTOs
+        return ResponseEntity.ok(
+                alunos.stream().map(AlunoDTO::createAlunoDTO).toList()
+        );
     }
 }

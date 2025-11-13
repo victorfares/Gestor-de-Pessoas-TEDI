@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Alunos</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .actions, .search-form { margin: 20px 0; display: flex; gap: 10px; align-items: center; }
+        .btn { padding: 10px 15px; text-decoration: none; color: white; border-radius: 5px; cursor: pointer; border: none; }
+        .btn-primary { background-color: #007bff; }
+        .btn-secondary { background-color: #6c757d; }
+        .btn-success { background-color: #28a745; }
+        .btn-home { background-color: #5a6268; }
+        input[type="text"] { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+
+<h1>Gerenciar Alunos</h1>
+
+<div class="actions">
+    <a th:href="@{/web/alunos/novo}" class="btn btn-primary">+ Adicionar Novo Aluno</a>
+    <a th:href="@{/}" class="btn btn-home">Voltar para Home</a>
+</div>
+
+<div class="search-form">
+    <form th:action="@{/web/alunos}" method="get">
+        <input type="text" name="query" placeholder="Buscar por nome ou RG..." th:value="${param.query}" />
+        <button type="submit" class="btn btn-success">Buscar</button>
+        <a th:href="@{/web/alunos}" class="btn btn-secondary">Limpar Busca</a>
+    </form>
+</div>
+
+<h2>Alunos Cadastrados</h2>
+
+<div th:if="${listaDeAlunos.isEmpty()}">
+    <p>Nenhum aluno encontrado.</p>
+</div>
+
+<table th:unless="${listaDeAlunos.isEmpty()}">
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>RG</th>
+        <th>Nível Digital</th>
+        <th>Email</th>
+        <th>Telefone</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="aluno : ${listaDeAlunos}">
+        <td th:text="${aluno.nome}"></td>
+        <td th:text="${aluno.rg}"></td>
+        <td th:text="${aluno.nivelDigital}"></td>
+        <td th:text="${aluno.email}"></td>
+        <td th:text="${aluno.telefone}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
