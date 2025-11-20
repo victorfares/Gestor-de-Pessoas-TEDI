@@ -2,68 +2,62 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Gestor TEDI</title>
+    <title>Membros TEDI</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .actions, .search-form { margin: 20px 0; display: flex; gap: 10px; align-items: center; }
-        .btn { padding: 10px 15px; text-decoration: none; color: white; border-radius: 5px; cursor: pointer; border: none; }
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
+        .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        tr:hover { background-color: #f1f1f1; }
+        .btn { padding: 8px 12px; text-decoration: none; border-radius: 4px; color: white; font-size: 14px; border: none; cursor: pointer; }
         .btn-primary { background-color: #007bff; }
+        .btn-warning { background-color: #ffc107; color: #333; }
         .btn-secondary { background-color: #6c757d; }
-        .btn-success { background-color: #28a745; }
-        input[type="text"] { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        .search-box { display: flex; gap: 5px; }
+        input[type="text"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-<h1>Gestor de Membros TEDI</h1>
-
-<div class="actions">
-    <a th:href="@{/web/membros/novo}" class="btn btn-primary">
-        + Adicionar Novo Membro
-    </a>
+<div class="header-actions">
+    <a th:href="@{/}" class="btn btn-secondary">← Voltar Home</a>
+    <div class="search-box">
+        <form th:action="@{/web/membros}" method="get" style="display:flex; gap:5px;">
+            <input type="text" name="query" placeholder="Buscar Membro..." th:value="${param.query}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a th:href="@{/web/membros}" class="btn btn-secondary">Limpar</a>
+        </form>
+    </div>
+    <a th:href="@{/web/membros/novo}" class="btn btn-primary">+ Novo Membro</a>
 </div>
 
-<div class="search-form">
-    <form th:action="@{/web/membros}" method="get">
-        <input type="text" name="query" placeholder="Buscar por nome ou RA..." th:value="${param.query}" />
-        <button type="submit" class="btn btn-success">Buscar</button>
+<h2>Lista de Membros</h2>
 
-        <a th:href="@{/web/membros}" class="btn btn-secondary">Limpar Busca</a>
-    </form>
-</div>
-
-<h2>Membros Cadastrados</h2>
-
-<div th:if="${listaDeMembros.isEmpty()}">
-    <p>Nenhum membro encontrado.</p>
-</div>
-
-<table th:unless="${listaDeMembros.isEmpty()}">
+<table>
     <thead>
     <tr>
         <th>Nome</th>
         <th>RA</th>
         <th>Departamento</th>
         <th>Função</th>
-        <th>Email</th>
-        <th>Telefone</th>
+        <th>Ações</th>
     </tr>
     </thead>
     <tbody>
+    <tr th:if="${listaDeMembros.isEmpty()}">
+        <td colspan="5" style="text-align:center;">Nenhum membro encontrado.</td>
+    </tr>
     <tr th:each="membro : ${listaDeMembros}">
-        <td th:text="${membro.nome}">Victor Hugo</td>
-        <td th:text="${membro.ra}">123456</td>
-        <td th:text="${membro.departamento}">Desenvolvimento</td>
-        <td th:text="${membro.funcao}">Dev Backend</td>
-        <td th:text="${membro.email}">victor@email.com</td>
-        <td th:text="${membro.telefone}">+554399999</td>
+        <td th:text="${membro.nome}"></td>
+        <td th:text="${membro.ra}"></td>
+        <td th:text="${membro.departamento}"></td>
+        <td th:text="${membro.funcao}"></td>
+        <td>
+            <a th:href="@{/web/membros/editar/{ra}(ra=${membro.ra})}" class="btn btn-warning">Editar</a>
+        </td>
     </tr>
     </tbody>
 </table>
-
 </body>
 </html>

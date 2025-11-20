@@ -1,66 +1,80 @@
 package com.example.gestorTEDI.infrastructure.controller;
 
 import com.example.gestorTEDI.domain.entity.Aluno;
-import com.example.gestorTEDI.domain.model.NivelDigital; // Importe o Enum
+import com.example.gestorTEDI.domain.model.NivelDigital;
 import com.example.gestorTEDI.domain.repository.AlunoRepository;
 import com.example.gestorTEDI.domain.service.AlunoService;
 import com.example.gestorTEDI.infrastructure.dtos.SaveAlunoDataDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/web/alunos") // <-- Prefixo para todas as rotas de Aluno
+@RequestMapping("/web/alunos")
 @RequiredArgsConstructor
 public class AlunoWebController {
 
     private final AlunoService alunoService;
     private final AlunoRepository alunoRepository;
 
+    // 1. LISTAR E BUSCAR
     @GetMapping
-    public String getAlunosPage(Model model,
-                                @RequestParam(name = "query", required = false, defaultValue = "") String query) {
+    public String getAlunosPage(Model model, @RequestParam(name = "query", required = false, defaultValue = "") String query) {
         List<Aluno> alunos;
         if (query.isBlank()) {
             alunos = alunoRepository.findAll();
         } else {
-            // Usa o método de busca por Nome ou RG
             alunos = alunoRepository.findByNomeContainingIgnoreCaseOrRgContainingIgnoreCase(query, query);
         }
         model.addAttribute("listaDeAlunos", alunos);
-        return "lista-alunos"; // Referencia /resources/templates/lista-alunos.html
+        return "lista-alunos";
     }
 
-    /**
-     * GET /web/alunos/novo
-     * Mostra o formulário para criar um novo aluno.
-     */
+    // 2. FORMULÁRIO DE CRIAÇÃO
     @GetMapping("/novo")
     public String getFormNovoAluno(Model model) {
-
-        // ---- A CORREÇÃO ESTÁ AQUI ----
-        // Chamamos o construtor com 5 argumentos (null)
-        model.addAttribute("novoAluno", new SaveAlunoDataDTO(null, null, null, null, null));
-
+        model.addAttribute("alunoDTO", new SaveAlunoDataDTO(null, null, null, null, null));
         model.addAttribute("niveisDigitais", NivelDigital.values());
+        model.addAttribute("isEdit", false);
         return "form-aluno";
     }
 
-    /**
-     * POST /web/alunos/salvar
-     * Recebe os dados do formulário e salva o novo aluno.
-     */
+    // 3. SALVAR NOVO
     @PostMapping("/salvar")
     public String salvarNovoAluno(SaveAlunoDataDTO novoAluno) {
-        // Este método já funciona perfeitamente com DTOs imutáveis!
         alunoService.createAluno(novoAluno);
+        return "redirect:/web/alunos";
+    }
 
+    // --- NOVOS MÉTODOS PARA EDIÇÃO ---
+
+    // 4. FORMULÁRIO DE EDIÇÃO
+    @GetMapping("/editar/{rg}")
+    public String getFormEditarAluno(@PathVariable("rg") String rg, Model model) {
+        Aluno aluno = alunoService.findByRg(rg); // Você já tem esse método no service (ou loadAluno)
+
+        // Converte Entidade -> DTO
+        SaveAlunoDataDTO dto = new SaveAlunoDataDTO(
+                aluno.getNome(),
+                aluno.getEmail(),
+                aluno.getTelefone(),
+                aluno.getRg(),
+                aluno.getNivelDigital()
+        );
+
+        model.addAttribute("alunoDTO", dto);
+        model.addAttribute("niveisDigitais", NivelDigital.values());
+        model.addAttribute("isEdit", true);
+        return "form-aluno";
+    }
+
+    // 5. SALVAR EDIÇÃO
+    @PostMapping("/editar/{rg}")
+    public String atualizarAluno(@PathVariable("rg") String rg, SaveAlunoDataDTO dadosAtualizados) {
+        alunoService.updateAluno(rg, dadosAtualizados); // Certifique-se de ter este método no AlunoService
         return "redirect:/web/alunos";
     }
 }

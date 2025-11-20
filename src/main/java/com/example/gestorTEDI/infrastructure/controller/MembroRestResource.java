@@ -5,6 +5,7 @@ import com.example.gestorTEDI.domain.repository.MembroRepository;
 import com.example.gestorTEDI.domain.service.MembroService;
 import com.example.gestorTEDI.infrastructure.dtos.MembroDTO;
 import com.example.gestorTEDI.infrastructure.dtos.SaveMembroDataDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,4 +50,14 @@ public class MembroRestResource {
         model.addAttribute("listaDeMembros", membros);
         return "lista-membros"; // Renderiza /resources/templates/lista-membros.html
     }
+
+    @PutMapping("/{ra}")
+    public ResponseEntity<MembroDTO> updateMembro(@PathVariable String ra,
+                                                  @RequestBody @Valid SaveMembroDataDTO dto) {
+
+        Membro membroAtualizado = membroService.updateMembro(ra, dto);
+
+        return ResponseEntity.ok(MembroDTO.createMembro(membroAtualizado));
+    }
 }
+

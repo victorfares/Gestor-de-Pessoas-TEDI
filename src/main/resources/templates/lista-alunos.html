@@ -2,65 +2,63 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Gerenciar Alunos</title>
+    <title>Alunos TEDI</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .actions, .search-form { margin: 20px 0; display: flex; gap: 10px; align-items: center; }
-        .btn { padding: 10px 15px; text-decoration: none; color: white; border-radius: 5px; cursor: pointer; border: none; }
-        .btn-primary { background-color: #007bff; }
+        /* Mesmos estilos para consistência */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
+        .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background-color: #28a745; color: white; } /* Verde para diferenciar alunos */
+        tr:hover { background-color: #f1f1f1; }
+        .btn { padding: 8px 12px; text-decoration: none; border-radius: 4px; color: white; font-size: 14px; border: none; cursor: pointer; }
+        .btn-primary { background-color: #28a745; }
+        .btn-warning { background-color: #ffc107; color: #333; }
         .btn-secondary { background-color: #6c757d; }
-        .btn-success { background-color: #28a745; }
-        .btn-home { background-color: #5a6268; }
-        input[type="text"] { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        .search-box { display: flex; gap: 5px; }
+        input[type="text"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-<h1>Gerenciar Alunos</h1>
-
-<div class="actions">
-    <a th:href="@{/web/alunos/novo}" class="btn btn-primary">+ Adicionar Novo Aluno</a>
-    <a th:href="@{/}" class="btn btn-home">Voltar para Home</a>
+<div class="header-actions">
+    <a th:href="@{/}" class="btn btn-secondary">← Voltar Home</a>
+    <div class="search-box">
+        <form th:action="@{/web/alunos}" method="get" style="display:flex; gap:5px;">
+            <input type="text" name="query" placeholder="Buscar Aluno (Nome/RG)..." th:value="${param.query}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a th:href="@{/web/alunos}" class="btn btn-secondary">Limpar</a>
+        </form>
+    </div>
+    <a th:href="@{/web/alunos/novo}" class="btn btn-primary">+ Novo Aluno</a>
 </div>
 
-<div class="search-form">
-    <form th:action="@{/web/alunos}" method="get">
-        <input type="text" name="query" placeholder="Buscar por nome ou RG..." th:value="${param.query}" />
-        <button type="submit" class="btn btn-success">Buscar</button>
-        <a th:href="@{/web/alunos}" class="btn btn-secondary">Limpar Busca</a>
-    </form>
-</div>
+<h2>Lista de Alunos</h2>
 
-<h2>Alunos Cadastrados</h2>
-
-<div th:if="${listaDeAlunos.isEmpty()}">
-    <p>Nenhum aluno encontrado.</p>
-</div>
-
-<table th:unless="${listaDeAlunos.isEmpty()}">
+<table>
     <thead>
     <tr>
         <th>Nome</th>
         <th>RG</th>
         <th>Nível Digital</th>
         <th>Email</th>
-        <th>Telefone</th>
+        <th>Ações</th>
     </tr>
     </thead>
     <tbody>
+    <tr th:if="${listaDeAlunos.isEmpty()}">
+        <td colspan="5" style="text-align:center;">Nenhum aluno encontrado.</td>
+    </tr>
     <tr th:each="aluno : ${listaDeAlunos}">
         <td th:text="${aluno.nome}"></td>
         <td th:text="${aluno.rg}"></td>
         <td th:text="${aluno.nivelDigital}"></td>
         <td th:text="${aluno.email}"></td>
-        <td th:text="${aluno.telefone}"></td>
+        <td>
+            <a th:href="@{/web/alunos/editar/{rg}(rg=${aluno.rg})}" class="btn btn-warning">Editar</a>
+        </td>
     </tr>
     </tbody>
 </table>
-
 </body>
 </html>

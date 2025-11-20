@@ -7,6 +7,7 @@ import com.example.gestorTEDI.domain.service.AlunoService;
 import com.example.gestorTEDI.infrastructure.dtos.AlunoDTO;
 import com.example.gestorTEDI.infrastructure.dtos.MembroDTO;
 import com.example.gestorTEDI.infrastructure.dtos.SaveAlunoDataDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +16,16 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/alunos")
+@RequestMapping("/api/alunos")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class AlunoRestResource {
 
     private final AlunoService alunoService;
     private final AlunoRepository alunoRepository;
 
     @PostMapping
-    public ResponseEntity<AlunoDTO> saveAluno(@RequestBody SaveAlunoDataDTO saveAlunoDataDTO) {
+    public ResponseEntity<AlunoDTO> saveAluno(@RequestBody @Valid SaveAlunoDataDTO saveAlunoDataDTO) {
         Aluno aluno = alunoService.createAluno(saveAlunoDataDTO);
         return ResponseEntity.created(URI.create("/alunos/" + aluno.getRg()))
                 .body(AlunoDTO.createAlunoDTO(aluno));
@@ -37,14 +39,21 @@ public class AlunoRestResource {
 
     @GetMapping
     public ResponseEntity<List<AlunoDTO>> findAlunos(
-            @RequestParam(value = "rg", required = false) String rg // <-- MUDANÇA AQUI
-    ) {
-        // 2. Chama o método do serviço (agora passando rg)
-        List<Aluno> alunos = alunoService.findAlunos(rg); // <-- MUDANÇA AQUI
+            @RequestParam(value = "rg", required = false) String rg) {
+        List<Aluno> alunos = alunoService.findAlunos(rg);
 
-        // 3. Converte a lista para DTOs
         return ResponseEntity.ok(
                 alunos.stream().map(AlunoDTO::createAlunoDTO).toList()
         );
+    }
+
+    @PutMapping("/{rg}")
+    public ResponseEntity<AlunoDTO> updateAluno(
+            @PathVariable("rg") String alunoRg,
+            @RequestBody @Valid SaveAlunoDataDTO saveAlunoData
+    ) {
+        Aluno aluno = alunoService.updateAluno(alunoRg, saveAlunoData);
+        return ResponseEntity.ok(AlunoDTO.createAlunoDTO(aluno));
+
     }
 }

@@ -1,8 +1,10 @@
 package com.example.gestorTEDI.domain.service;
 
 import com.example.gestorTEDI.domain.entity.Membro;
+import com.example.gestorTEDI.domain.exception.MembroNotFoundException;
 import com.example.gestorTEDI.domain.repository.MembroRepository;
 import com.example.gestorTEDI.infrastructure.dtos.SaveMembroDataDTO;
+import com.example.gestorTEDI.infrastructure.exception.RequestException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,28 @@ public class MembroService {
                 .telefone(saveMembroData.getTelefoneMembro())
                 .build();
         membroRepository.save(membro);
+        return membro;
+    }
+    public Membro loadMembro(String ra) {
+        return membroRepository.findByRa(ra)
+                .orElseThrow(() -> new MembroNotFoundException("Membro não encontrado com RA: " + ra));
+    }
+    private boolean existeMembroNome(String nome) {
+        return membroRepository.findByNome(nome).isPresent();
+    }
+    @Transactional
+    public Membro updateMembro(String ra, SaveMembroDataDTO saveMembroData) {
+        Membro membroExistentePorNome = membroRepository.findByNome(saveMembroData.getNomeMembro()).orElse(null);
+        if (membroExistentePorNome != null && !membroExistentePorNome.getRa().equals(ra)) {
+            throw new RequestException("Já existe um membro cadastrado com este nome.", "membro.nome.duplicate");
+        }
+        Membro membro = loadMembro(ra);
+        membro.setNome(saveMembroData.getNomeMembro());
+        membro.setEmail(saveMembroData.getEmailMembro());
+        membro.setTelefone(saveMembroData.getTelefoneMembro());
+        membro.setRa(saveMembroData.getRaMembro());
+        membro.setDepartamento(saveMembroData.getDepartamentoMembro());
+        membro.setFuncao(saveMembroData.getFuncaoMembro());
         return membro;
     }
 }

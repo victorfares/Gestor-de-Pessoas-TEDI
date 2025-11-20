@@ -7,58 +7,73 @@ import com.example.gestorTEDI.infrastructure.dtos.SaveMembroDataDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/web")
+@RequestMapping("/web/membros")
 @RequiredArgsConstructor
-
 public class MembroWebController {
 
     private final MembroService membroService;
     private final MembroRepository membroRepository;
 
-    @GetMapping("/membros")
-    public String getMembrosPage(Model model,
-                                 // 1. Esta anotação captura o "?query=..." da URL
-                                 @RequestParam(name = "query", required = false, defaultValue = "") String query) {
-
-        List<Membro> membros; // 2. Declare a lista
-
+    // 1. LISTAR E BUSCAR
+    @GetMapping
+    public String getMembrosPage(Model model, @RequestParam(name = "query", required = false, defaultValue = "") String query) {
+        List<Membro> membros;
         if (query.isBlank()) {
-            // 3. Se a busca (query) estiver vazia, busca todos
             membros = membroRepository.findAll();
         } else {
-            // 4. Se a busca NÃO estiver vazia, usa o novo método do repositório
             membros = membroRepository.findByNomeContainingIgnoreCaseOrRaContainingIgnoreCase(query, query);
         }
-
         model.addAttribute("listaDeMembros", membros);
-        return "lista-membros"; // Renderiza /resources/templates/lista-membros.html
+        return "lista-membros";
     }
 
-    @GetMapping("/membros/novo")
+    // 2. FORMULÁRIO DE CRIAÇÃO (Novo)
+    @GetMapping("/novo")
     public String getFormNovoMembro(Model model) {
-        // Envia um objeto DTO vazio para o Thymeleaf
-        // O Thymeleaf vai usar este objeto para "amarrar" (bind) os campos do form
-        model.addAttribute("novoMembro", new SaveMembroDataDTO(null, null, null, null, null, null));
-        return "form-membro"; // Renderiza /resources/templates/form-membro.html
+        model.addAttribute("membroDTO", new SaveMembroDataDTO(null, null, null, null, null, null));
+        model.addAttribute("isEdit", false); // Flag para o HTML saber que é criação
+        return "form-membro";
     }
 
-    @PostMapping("/membros/salvar")
+    // 3. SALVAR NOVO MEMBRO
+    @PostMapping("/salvar")
     public String salvarNovoMembro(SaveMembroDataDTO novoMembro) {
-        // O Spring/Thymeleaf magicamente pega os dados do form
-        // e preenche o objeto 'novoMembro' para você.
-
-        // Usa o Service que já criamos para salvar no banco
         membroService.createMembro(novoMembro);
+        return "redirect:/web/membros";
+    }
 
-        // Redireciona o usuário de volta para a página de listagem
+    // --- NOVOS MÉTODOS PARA EDIÇÃO ---
+
+    // 4. FORMULÁRIO DE EDIÇÃO (Carrega dados existentes)
+    @GetMapping("/editar/{ra}")
+    public String getFormEditarMembro(@PathVariable("ra") String ra, Model model) {
+        // Busca o membro existente
+        Membro membro = membroService.loadMembro(ra);
+
+        // Converte a Entidade para o DTO para preencher o formulário
+        SaveMembroDataDTO dto = new SaveMembroDataDTO(
+                membro.getNome(),
+                membro.getEmail(),
+                membro.getTelefone(),
+                membro.getRa(),
+                membro.getDepartamento(),
+                membro.getFuncao()
+        );
+
+        model.addAttribute("membroDTO", dto);
+        model.addAttribute("isEdit", true); // Flag para o HTML saber que é edição
+        return "form-membro";
+    }
+
+    // 5. SALVAR EDIÇÃO (Update)
+    @PostMapping("/editar/{ra}")
+    public String atualizarMembro(@PathVariable("ra") String ra, SaveMembroDataDTO dadosAtualizados) {
+        membroService.updateMembro(ra, dadosAtualizados);
         return "redirect:/web/membros";
     }
 }
