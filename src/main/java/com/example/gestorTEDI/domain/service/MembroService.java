@@ -1,5 +1,6 @@
 package com.example.gestorTEDI.domain.service;
 
+import com.example.gestorTEDI.domain.entity.AulaEvento;
 import com.example.gestorTEDI.domain.entity.Membro;
 import com.example.gestorTEDI.domain.exception.MembroNotFoundException;
 import com.example.gestorTEDI.domain.repository.MembroRepository;
@@ -57,8 +58,14 @@ public class MembroService {
     }
     @Transactional
     public void deleteMembro(String ra) {
-        if (!membroRepository.existsById(ra)) {
-            throw new MembroNotFoundException("Não é possível deletar. Membro não encontrado com RA: " + ra);
+        Membro membro = membroRepository.findByRa(ra)
+                .orElseThrow(() -> new MembroNotFoundException("Não é possível deletar. Membro não encontrado com RA: " + ra));
+
+        // 2. Remove o membro das listas de presença das aulas
+        if (membro.getAulasEventos() != null) {
+            for (AulaEvento aula : membro.getAulasEventos()) {
+                aula.getMembrosPart().remove(membro);
+            }
         }
         membroRepository.deleteById(ra);
         log.info("### Membro com RA {} deletado com sucesso ###", ra);

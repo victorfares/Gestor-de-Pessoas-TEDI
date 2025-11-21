@@ -1,6 +1,7 @@
 package com.example.gestorTEDI.domain.service;
 
 import com.example.gestorTEDI.domain.entity.Aluno;
+import com.example.gestorTEDI.domain.entity.AulaEvento;
 import com.example.gestorTEDI.domain.exception.AlunoNotFoundException;
 import com.example.gestorTEDI.domain.repository.AlunoRepository;
 import com.example.gestorTEDI.domain.repository.MembroRepository;
@@ -76,10 +77,14 @@ public class AlunoService {
 
     @Transactional
     public void deleteAluno(String rg) {
-        if (!alunoRepository.existsById(rg)) {
-            throw new AlunoNotFoundException("Não é possível deletar. Aluno não encontrado com RG: " + rg);
-        }
 
+        Aluno aluno = alunoRepository.findByRg(rg)
+                .orElseThrow(() -> new AlunoNotFoundException("Não é possível deletar. Aluno não encontrado com RG: " + rg));
+        if (aluno.getAulasEventos() != null) {
+            for (AulaEvento aula : aluno.getAulasEventos()) {
+                aula.getAlunosPart().remove(aluno);
+            }
+        }
         alunoRepository.deleteById(rg);
         log.info("### Aluno com RG {} deletado com sucesso ###", rg);
     }
