@@ -1,0 +1,25 @@
+package com.example.gestorTEDI.infrastructure.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+
+                // AQUI ESTÁ A SEGURANÇA:
+                // Troque pela URL exata do seu site no Netlify (sem a barra / no final)
+                .allowedOrigins("https://gestor-tedi-oficial.netlify.app", "http://127.0.0.1:5500")
+
+                // DICA: Se você ainda quiser testar localmente (Live Server),
+                // pode adicionar o localhost na lista assim:
+                // .allowedOrigins("https://gestor-tedi-oficial.netlify.app", "http://127.0.0.1:5500")
+
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
+                .allowedHeaders("*");
+    }
+}
