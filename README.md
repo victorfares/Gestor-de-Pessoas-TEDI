@@ -55,8 +55,8 @@ O projeto segue o padrão de camadas (Layered Architecture) e DTO Pattern:
 ### Pré-requisitos
 * Java 17 SDK instalado.
 * Maven instalado.
-* MySQL (Opcional, caso queira rodar com banco real localmente).
-
+* MySQL
+  
 ### 1. Clonar o Repositório
 ```bash
 git clone [https://github.com/seu-usuario/Gestor-de-Pessoas-TEDI.git](https://github.com/seu-usuario/Gestor-de-Pessoas-TEDI.git)
