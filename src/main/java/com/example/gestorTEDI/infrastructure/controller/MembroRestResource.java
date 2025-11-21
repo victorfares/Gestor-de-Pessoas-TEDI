@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/membros")
+@RequestMapping("/api/membros")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 
@@ -58,6 +58,25 @@ public class MembroRestResource {
         Membro membroAtualizado = membroService.updateMembro(ra, dto);
 
         return ResponseEntity.ok(MembroDTO.createMembro(membroAtualizado));
+    }
+    @DeleteMapping("/{ra}")
+    public ResponseEntity<Void> deleteMembro(@PathVariable String ra) {
+        membroService.deleteMembro(ra);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MembroDTO>> getAllMembros() {
+        List<Membro> membros = membroService.getAllMembros();
+        return ResponseEntity.ok(
+                membros.stream().map(MembroDTO::createMembro).toList()
+        );
+    }
+
+    @GetMapping("/{ra}")
+    public ResponseEntity<MembroDTO> getMembroByRa(@PathVariable String ra) {
+        Membro membro = membroService.loadMembro(ra);
+        return ResponseEntity.ok(MembroDTO.createMembro(membro));
     }
 }
 

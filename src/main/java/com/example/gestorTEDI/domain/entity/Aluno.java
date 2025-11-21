@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -30,4 +32,7 @@ public class Aluno extends Pessoa {
     @Enumerated(EnumType.STRING)
     @Column(name = "aluno_niveldigital",  nullable = false)
     private NivelDigital nivelDigital;
+
+    @ManyToMany(mappedBy = "alunosPart")
+    private List<AulaEvento> aulasEventos;
 }

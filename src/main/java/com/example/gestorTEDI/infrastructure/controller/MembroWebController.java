@@ -76,4 +76,10 @@ public class MembroWebController {
         membroService.updateMembro(ra, dadosAtualizados);
         return "redirect:/web/membros";
     }
+
+    @GetMapping("/deletar/{ra}")
+    public String deletarMembro(@PathVariable("ra") String ra) {
+        membroService.deleteMembro(ra);
+        return "redirect:/web/membros";
+    }
 }

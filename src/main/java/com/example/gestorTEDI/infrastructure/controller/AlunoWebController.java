@@ -20,7 +20,6 @@ public class AlunoWebController {
     private final AlunoService alunoService;
     private final AlunoRepository alunoRepository;
 
-    // 1. LISTAR E BUSCAR
     @GetMapping
     public String getAlunosPage(Model model, @RequestParam(name = "query", required = false, defaultValue = "") String query) {
         List<Aluno> alunos;
@@ -33,7 +32,6 @@ public class AlunoWebController {
         return "lista-alunos";
     }
 
-    // 2. FORMULÁRIO DE CRIAÇÃO
     @GetMapping("/novo")
     public String getFormNovoAluno(Model model) {
         model.addAttribute("alunoDTO", new SaveAlunoDataDTO(null, null, null, null, null));
@@ -42,7 +40,6 @@ public class AlunoWebController {
         return "form-aluno";
     }
 
-    // 3. SALVAR NOVO
     @PostMapping("/salvar")
     public String salvarNovoAluno(SaveAlunoDataDTO novoAluno) {
         alunoService.createAluno(novoAluno);
@@ -71,10 +68,15 @@ public class AlunoWebController {
         return "form-aluno";
     }
 
-    // 5. SALVAR EDIÇÃO
     @PostMapping("/editar/{rg}")
     public String atualizarAluno(@PathVariable("rg") String rg, SaveAlunoDataDTO dadosAtualizados) {
         alunoService.updateAluno(rg, dadosAtualizados); // Certifique-se de ter este método no AlunoService
+        return "redirect:/web/alunos";
+    }
+
+    @GetMapping("/deletar/{rg}")
+    public String deletarAluno(@PathVariable("rg") String rg) {
+        alunoService.deleteAluno(rg);
         return "redirect:/web/alunos";
     }
 }

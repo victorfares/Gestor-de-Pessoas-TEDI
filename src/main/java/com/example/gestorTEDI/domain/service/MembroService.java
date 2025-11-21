@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -52,5 +54,17 @@ public class MembroService {
         membro.setDepartamento(saveMembroData.getDepartamentoMembro());
         membro.setFuncao(saveMembroData.getFuncaoMembro());
         return membro;
+    }
+    @Transactional
+    public void deleteMembro(String ra) {
+        if (!membroRepository.existsById(ra)) {
+            throw new MembroNotFoundException("Não é possível deletar. Membro não encontrado com RA: " + ra);
+        }
+        membroRepository.deleteById(ra);
+        log.info("### Membro com RA {} deletado com sucesso ###", ra);
+    }
+
+    public List<Membro> getAllMembros() {
+        return membroRepository.findAll();
     }
 }

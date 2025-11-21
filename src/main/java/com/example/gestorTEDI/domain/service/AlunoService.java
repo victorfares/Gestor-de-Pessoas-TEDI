@@ -74,5 +74,16 @@ public class AlunoService {
         return alunoRepository.findByNome(nome).isPresent();
     }
 
+    @Transactional
+    public void deleteAluno(String rg) {
+        if (!alunoRepository.existsById(rg)) {
+            throw new AlunoNotFoundException("Não é possível deletar. Aluno não encontrado com RG: " + rg);
+        }
 
+        alunoRepository.deleteById(rg);
+        log.info("### Aluno com RG {} deletado com sucesso ###", rg);
+    }
 }
+
+
+

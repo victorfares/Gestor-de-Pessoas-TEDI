@@ -56,4 +56,10 @@ public class AlunoRestResource {
         return ResponseEntity.ok(AlunoDTO.createAlunoDTO(aluno));
 
     }
+
+    @DeleteMapping("/{rg}")
+    public ResponseEntity<Void> deleteAluno(@PathVariable String rg) {
+        alunoService.deleteAluno(rg);
+        return ResponseEntity.noContent().build();
+    }
 }

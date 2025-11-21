@@ -14,6 +14,7 @@
         .btn-primary { background-color: #007bff; }
         .btn-warning { background-color: #ffc107; color: #333; }
         .btn-secondary { background-color: #6c757d; }
+        .btn-danger { background-color: #dc3545; color: white; } /* ESTILO NOVO */
         .search-box { display: flex; gap: 5px; }
         input[type="text"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
     </style>
@@ -55,6 +56,12 @@
         <td th:text="${membro.funcao}"></td>
         <td>
             <a th:href="@{/web/membros/editar/{ra}(ra=${membro.ra})}" class="btn btn-warning">Editar</a>
+
+            <a th:href="@{/web/membros/deletar/{ra}(ra=${membro.ra})}"
+               class="btn btn-danger"
+               onclick="return confirm('Tem certeza que deseja excluir este membro?');">
+                Excluir
+            </a>
         </td>
     </tr>
     </tbody>

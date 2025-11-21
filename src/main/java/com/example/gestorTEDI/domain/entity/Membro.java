@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -26,5 +28,7 @@ public class Membro extends Pessoa {
     @Column(name = "membro_funcao")
     private String funcao;
 
+    @ManyToMany(mappedBy = "membrosPart")
+    private List<AulaEvento> aulasEventos;
 
 }
