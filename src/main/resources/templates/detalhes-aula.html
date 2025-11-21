@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Aula</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        h1 { border-bottom: 2px solid #6f42c1; padding-bottom: 10px; }
+        .info-box { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+
+        .columns { display: flex; gap: 20px; }
+        .column { flex: 1; background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+
+        .add-form { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        input[type="text"] { flex: 1; padding: 8px; }
+        .btn-add { background-color: #28a745; color: white; border: none; padding: 8px; cursor: pointer; }
+
+        ul { list-style: none; padding: 0; }
+        li { padding: 8px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .btn-back { display: inline-block; margin-bottom: 15px; text-decoration: none; color: #333; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a th:href="@{/web/aulas}" class="btn-back">← Voltar para Lista</a>
+
+    <div class="info-box">
+        <h1 th:text="${aula.titulo}">Título da Aula</h1>
+        <p><strong>Descrição:</strong> <span th:text="${aula.descricao}"></span></p>
+        <p><strong>Data:</strong> <span th:text="${aula.data}"></span></p>
+    </div>
+
+    <div class="columns">
+
+        <div class="column">
+            <h3>Alunos Participantes</h3>
+
+            <form th:action="@{/web/aulas/{id}/adicionar-aluno(id=${aula.id})}" method="post" class="add-form">
+                <input type="text" name="rgAluno" placeholder="Digite o RG do Aluno" required />
+                <button type="submit" class="btn-add">Adicionar</button>
+            </form>
+
+            <ul>
+                <li th:each="aluno : ${aula.alunosPart}">
+                    <span th:text="${aluno.nome}">Nome</span>
+                    <small th:text="'(RG: ' + ${aluno.rg} + ')'"></small>
+                </li>
+                <li th:if="${aula.alunosPart.isEmpty()}" style="color: #777;">Nenhum aluno adicionado.</li>
+            </ul>
+        </div>
+
+        <div class="column">
+            <h3>Membros Participantes</h3>
+
+            <form th:action="@{/web/aulas/{id}/adicionar-membro(id=${aula.id})}" method="post" class="add-form">
+                <input type="text" name="raMembro" placeholder="Digite o RA do Membro" required />
+                <button type="submit" class="btn-add">Adicionar</button>
+            </form>
+
+            <ul>
+                <li th:each="membro : ${aula.membrosPart}">
+                    <span th:text="${membro.nome}">Nome</span>
+                    <small th:text="'(RA: ' + ${membro.ra} + ')'"></small>
+                </li>
+                <li th:if="${aula.membrosPart.isEmpty()}" style="color: #777;">Nenhum membro adicionado.</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

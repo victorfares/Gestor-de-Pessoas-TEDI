@@ -1,9 +1,9 @@
 package com.example.gestorTEDI.domain.exception;
 
-import com.example.gestorTEDI.infrastructure.exception.RequestException;
+import jakarta.persistence.EntityNotFoundException;
 
-public class AlunoJaExisteException extends RequestException {
-    public AlunoJaExisteException(String nome) {
-        super("Aluno Ja cadastrado com esse nome.", "Nome : "+nome);
+public class AulaEventoNotFoundException extends EntityNotFoundException {
+    public AulaEventoNotFoundException(String message) {
+        super(message);
     }
 }

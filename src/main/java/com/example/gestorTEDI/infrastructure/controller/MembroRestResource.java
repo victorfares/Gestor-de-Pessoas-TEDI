@@ -33,22 +33,18 @@ public class MembroRestResource {
 
     @GetMapping("/view")
     public String getMembrosPage(Model model,
-                                 // Pega o parâmetro "?query=" da URL
-                                 // defaultValue = "" garante que não dê erro se vier vazio
                                  @RequestParam(name = "query", required = false, defaultValue = "") String query) {
 
         List<Membro> membros;
 
         if (query.isBlank()) {
-            // Se a busca estiver vazia, lista todos
             membros = membroRepository.findAll();
         } else {
-            // Se tiver algo na busca, filtra pelo repositório
             membros = membroRepository.findByNomeContainingIgnoreCaseOrRaContainingIgnoreCase(query, query);
         }
 
         model.addAttribute("listaDeMembros", membros);
-        return "lista-membros"; // Renderiza /resources/templates/lista-membros.html
+        return "lista-membros";
     }
 
     @PutMapping("/{ra}")

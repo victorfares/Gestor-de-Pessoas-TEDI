@@ -46,12 +46,9 @@ public class AlunoWebController {
         return "redirect:/web/alunos";
     }
 
-    // --- NOVOS MÉTODOS PARA EDIÇÃO ---
-
-    // 4. FORMULÁRIO DE EDIÇÃO
     @GetMapping("/editar/{rg}")
     public String getFormEditarAluno(@PathVariable("rg") String rg, Model model) {
-        Aluno aluno = alunoService.findByRg(rg); // Você já tem esse método no service (ou loadAluno)
+        Aluno aluno = alunoService.findByRg(rg);
 
         // Converte Entidade -> DTO
         SaveAlunoDataDTO dto = new SaveAlunoDataDTO(
@@ -70,7 +67,7 @@ public class AlunoWebController {
 
     @PostMapping("/editar/{rg}")
     public String atualizarAluno(@PathVariable("rg") String rg, SaveAlunoDataDTO dadosAtualizados) {
-        alunoService.updateAluno(rg, dadosAtualizados); // Certifique-se de ter este método no AlunoService
+        alunoService.updateAluno(rg, dadosAtualizados);
         return "redirect:/web/alunos";
     }
 
