@@ -48,20 +48,21 @@ public class MembroWebController {
     public String getFormEditarMembro(@PathVariable("ra") String ra, Model model) {
         // Busca o membro existente
         Membro membro = membroService.loadMembro(ra);
+
+
         SaveMembroDataDTO dto = new SaveMembroDataDTO(
+                membro.getRa(),
                 membro.getNome(),
                 membro.getEmail(),
-                membro.getTelefone(),
-                membro.getRa(),
                 membro.getDepartamento(),
-                membro.getFuncao()
+                membro.getFuncao(),
+                membro.getTelefone()
         );
 
         model.addAttribute("membroDTO", dto);
         model.addAttribute("isEdit", true);
         return "form-membro";
     }
-
     @PostMapping("/editar/{ra}")
     public String atualizarMembro(@PathVariable("ra") String ra, SaveMembroDataDTO dadosAtualizados) {
         membroService.updateMembro(ra, dadosAtualizados);
