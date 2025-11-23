@@ -1,4 +1,4 @@
-# 🚀 Gestor de Pessoas TEDI
+#  Gestor de Pessoas TEDI
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
@@ -8,12 +8,12 @@
 
 > Um sistema completo para gestão de membros, alunos e eventos acadêmicos, desenvolvido com arquitetura moderna baseada em microsserviços e nuvem.
 
-## 📖 Sobre o Projeto
+##  Sobre o Projeto
 
 O **Gestor TEDI** é uma aplicação Full-Stack desenvolvida para gerenciar as atividades de um projeto da UTFPR-CP. O sistema permite o cadastro de alunos e membros da equipe, além da criação e gerenciamento de aulas e eventos, controlando a presença e participação através de relacionamentos complexos (Many-to-Many).
 
 
-## 🛠️ Tecnologias e Frameworks
+##  Tecnologias e Frameworks
 
 ### Backend (API REST)
 * **Java 17 (LTS):** Linguagem base robusta e moderna.
@@ -50,13 +50,13 @@ O projeto segue o padrão de camadas (Layered Architecture) e DTO Pattern:
 
 ---
 
-## 🚀 Como Rodar Localmente
+##  Como Rodar Localmente
 
 ### Pré-requisitos
 * Java 17 SDK instalado.
 * Maven instalado.
-* MySQL (Opcional, caso queira rodar com banco real localmente).
-
+* MySQL
+  
 ### 1. Clonar o Repositório
 ```bash
 git clone [https://github.com/seu-usuario/Gestor-de-Pessoas-TEDI.git](https://github.com/seu-usuario/Gestor-de-Pessoas-TEDI.git)
