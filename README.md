@@ -6,8 +6,7 @@
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 
-> Um sistema completo para gestão de membros, alunos e eventos acadêmicos, desenvolvido com arquitetura moderna baseada em microsserviços e nuvem.
-
+> Um sistema completo para gestão de membros, alunos e eventos acadêmicos, desenvolvido com arquitetura moderna.
 ##  Sobre o Projeto
 
 O **Gestor TEDI** é uma aplicação Full-Stack desenvolvida para gerenciar as atividades de um projeto da UTFPR-CP. O sistema permite o cadastro de alunos e membros da equipe, além da criação e gerenciamento de aulas e eventos, controlando a presença e participação através de relacionamentos complexos (Many-to-Many).
